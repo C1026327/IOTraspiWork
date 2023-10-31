@@ -49,23 +49,9 @@ def add_data(self,data_metadata,engine):
         session.add(data_metadata)
         session.commit()
 
-if __name__ == "__main__":
-    engine = create_engine('sqlite:///iot.db', echo=True)
-    Base.metadata.create_all(engine)
-    main()
-#     deviceTag=''.join((random.choice('environment') for i in range(5)))
-#     status="enabled"
-#     version="1.0"
-#     device=Device(None,deviceTag,status,version,dt.now())
-#     device.reg_device(device,engine)
-#     sense=SenseHat()
-#     temp=sense.get_temperature()
-#     temp_sensor=StreamingData(None,10,temp,dt.now(),None)
-#     temp_sensor.add_data(temp_sensor,engine)
-#     print(temp)
-
 def main():
-    # functions_names = [register_device_menu, device_to_sense_menu, show_all_sensed_data, exit_menu]
+    functions_names = [register_device_menu]
+    #, device_to_sense_menu, show_all_sensed_data, exit_menu]
     menu_items = dict(enumerate(functions_names, start=1))
     while True:
         show_menu(menu_items)
@@ -86,3 +72,18 @@ def register_device_menu():
     device = Device(None,deviceTag,status,version,dt.now())
     device.reg_device(device,engine)
     print ("Your device was registered successfully.\n")
+
+if __name__ == "__main__":
+    engine = create_engine('sqlite:///iot.db', echo=True)
+    Base.metadata.create_all(engine)
+    main()
+#     deviceTag=''.join((random.choice('environment') for i in range(5)))
+#     status="enabled"
+#     version="1.0"
+#     device=Device(None,deviceTag,status,version,dt.now())
+#     device.reg_device(device,engine)
+#     sense=SenseHat()
+#     temp=sense.get_temperature()
+#     temp_sensor=StreamingData(None,10,temp,dt.now(),None)
+#     temp_sensor.add_data(temp_sensor,engine)
+#     print(temp)
