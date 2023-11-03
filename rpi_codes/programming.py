@@ -40,41 +40,41 @@ class StreamingData(Base):
         self.sensingTime=sensingTime
         self.timestamp=timestamp
 
+    def reg_device(self,device,engine):
+        Session = sessionmaker(engine)
+        with Session() as session:
+            session.add(device)
+            session.commit()
+
     def add_data(self,data_metadata,engine):
         Session=sessionmaker(engine)
         with Session() as session:
             session.add(data_metadata)
             session.commit()
 
-    def main():
-            def show_menu(menu):
-                for i, function in menu.items():
-                    print(i,function.__name__)
-            
-            def reg_device(self,device,engine):
-                Session = sessionmaker(engine)
-                with Session() as session:
-                    session.add(device)
-                    session.commit()
+def show_menu(menu):
+    for i, function in menu.items():
+        print(i,function.__name__)
 
-            def register_device_menu():
-                print("\n This is the device registration menu.")
-                deviceTag=input("Please enter the tag for a device: ")
-                status = input("Please enter the status of the device: ")
-                version = input("Please enter the device version: ")
-                device = Device(None,deviceTag,status,version,dt.now())
-                device.reg_device(device, engine)
-                print ("Your device was registered successfully.\n")
+def register_device_menu():
+    print("\n This is the device registration menu.")
+    deviceTag=input("Please enter the tag for a device: ")
+    status = input("Please enter the status of the device: ")
+    version = input("Please enter the device version: ")
+    device = Device(None,deviceTag,status,version,dt.now())
+    device.reg_device(device,engine)
+    print ("Your device was registered successfully.\n")
 
-            functions_names = [register_device_menu]
+def main():
+    functions_names = [register_device_menu]
         #, device_to_sense_menu, show_all_sensed_data, exit_menu]
-            menu_items = dict(enumerate(functions_names, start=1))
-            while True:
-                show_menu(menu_items)
-                selection = int(
-                    input("Please enter your desired function number: "))
-                selected_value = menu_items[selection]
-                selected_value()
+    menu_items = dict(enumerate(functions_names, start=1))
+    while True:
+        show_menu(menu_items)
+        selection = int(
+            input("Please enter your desired function number: "))
+        selected_value = menu_items[selection]
+        selected_value()
 
     if __name__ == "__main__":
         engine = create_engine('sqlite:///iot.db', echo=True)
