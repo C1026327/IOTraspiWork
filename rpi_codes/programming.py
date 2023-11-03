@@ -65,6 +65,28 @@ def register_device_menu():
     device.reg_device(device,engine)
     print ("Your device was registered successfully.\n")
 
+def device_to_sense_menu():
+    print("\n This is reading data from a sensor menu")
+    print(" P - Sense current pressure: ")
+    print(" T - Sense current temperature: ")
+    print(" H - Sense current humidity: ")
+    print(" A - Sense current momentum: ")
+    print(" X - Any other key to exist from sensing menu: ")
+    to_sense=input("Input your sensor choice: ")
+    idForDevice = input("Input the device id that you have already registered: ")
+    sense = SenseHat()
+
+    if to_sense == "P":
+        pressure_sensor = round(sense.get_pressure(),2)
+        streamingData=StreamingData(None, idForDevice, pressure_sensor,dt.now(),None)
+        StreamingData.add_data(streamingData,engine)
+        print("Pressure: %s Millibars" % pressure_sensor)
+        sense.clear()
+        sense.show_messages("%sMillibars" % pressure_sensor, scroll_speed=0.2, text_colour=[0,0,255])
+        sleep(3)
+        sense.clear()
+    
+
 def main():
     functions_names = [register_device_menu]
         #, device_to_sense_menu, show_all_sensed_data, exit_menu]
