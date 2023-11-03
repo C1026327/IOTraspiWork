@@ -88,8 +88,7 @@ def device_to_sense_menu():
     
 
 def main():
-    functions_names = [register_device_menu]
-        #, device_to_sense_menu, show_all_sensed_data, exit_menu]
+    functions_names = [register_device_menu, device_to_sense_menu, show_all_sensed_data, exit_menu]
     menu_items = dict(enumerate(functions_names, start=1))
     while True:
         show_menu(menu_items)
