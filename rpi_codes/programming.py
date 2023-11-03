@@ -40,12 +40,6 @@ class StreamingData(Base):
         self.sensingTime=sensingTime
         self.timestamp=timestamp
 
-    def reg_device(self,device,engine):
-        Session = sessionmaker(engine)
-        with Session() as session:
-            session.add(device)
-            session.commit()
-
     def add_data(self,data_metadata,engine):
         Session=sessionmaker(engine)
         with Session() as session:
@@ -56,6 +50,12 @@ class StreamingData(Base):
             def show_menu(menu):
                 for i, function in menu.items():
                     print(i,function.__name__)
+            
+            def reg_device(self,device,engine):
+                Session = sessionmaker(engine)
+                with Session() as session:
+                    session.add(device)
+                    session.commit()
 
             def register_device_menu():
                 print("\n This is the device registration menu.")
@@ -63,7 +63,7 @@ class StreamingData(Base):
                 status = input("Please enter the status of the device: ")
                 version = input("Please enter the device version: ")
                 device = Device(None,deviceTag,status,version,dt.now())
-                device.reg_device(device,engine)
+                device.reg_device(device, engine)
                 print ("Your device was registered successfully.\n")
 
             functions_names = [register_device_menu]
