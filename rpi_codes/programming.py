@@ -25,6 +25,12 @@ class Device(Base):
         self.status=status
         self.version=version
         self.lastUpdated=lastUpdated
+        
+    def reg_device(self,device,engine):
+        Session = sessionmaker(engine)
+        with Session() as session:
+            session.add(device)
+            session.commit()
 
 class StreamingData(Base):
     __tablename__ = 'streaming_data'
@@ -39,12 +45,6 @@ class StreamingData(Base):
         self.deviceId=deviceId
         self.sensingTime=sensingTime
         self.timestamp=timestamp
-
-    def reg_device(self,device,engine):
-        Session = sessionmaker(engine)
-        with Session() as session:
-            session.add(device)
-            session.commit()
 
     def add_data(self,data_metadata,engine):
         Session=sessionmaker(engine)
