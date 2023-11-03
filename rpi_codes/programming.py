@@ -76,10 +76,10 @@ def main():
         selected_value = menu_items[selection]
         selected_value()
 
-    if __name__ == "__main__":
-        engine = create_engine('sqlite:///iot.db', echo=True)
-        Base.metadata.create_all(engine)
-        main()
+if __name__ == "__main__":
+    engine = create_engine('sqlite:///iot.db', echo=True)
+    Base.metadata.create_all(engine)
+    main()
 #     deviceTag=''.join((random.choice('environment') for i in range(5)))
 #     status="enabled"
 #     version="1.0"
