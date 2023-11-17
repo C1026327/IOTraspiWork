@@ -102,10 +102,23 @@ def device_to_sense_menu():
         streamingData2.add_data(streamingData2, engine)
         print("Humidity:  ", humidity_sensor)
         sense.clear()
-        sense.show_message("%.1f  " % humidity_sensor, scroll_speed=0.1, text_colour=[255,0,255])
+        sense.show_message("%.1f  " % humidity_sensor, scroll_speed=0.1, text_colour=[125,175,255])
         sleep(3)
         sense.clear()
-        
+
+    elif to_sense == "A":
+        acceleration=sense.get_accelerometer_raw()
+        x = round(acceleration['x'],2)
+        y = round(acceleration['y'],2)
+        z = round(acceleration['z'],2)
+        streamingData3=StreamingData(None, idForDevice, round(x,2), dt.now(), None)
+        streamingData3.add_data(streamingData3,engine)
+        print("x={0}, y={1}, z={2}".format(x, y, z))
+        sense.clear()
+        sense.show_message("x={0}, y={1}, z={2}".format(x, y, z), scroll_speed=0.1, text_colour=[255,130,130])
+    
+    else:
+        print("something else")
 
 def main():
     functions_names = [register_device_menu, device_to_sense_menu] #, show_all_sensed_data, exit_menu
