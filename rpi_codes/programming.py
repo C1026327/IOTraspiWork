@@ -120,11 +120,28 @@ def device_to_sense_menu():
     else:
         print("something else")
 
+def show_all_sensed_data():
+    sense=SenseHat()
+    temperature_sensor = round(sense.get_temperature(),2)
+    pressure_sensor = round(sense.get_pressure(),2)
+    acceleration=sense.get_accelerometer_raw()
+    x = round(acceleration['x'],2)
+    y = round(acceleration['y'],2)
+    z = round(acceleration['z'],2)
+    humidity_sensor = round(sense.get_humidity(),2)
+
+    print("Pressure: %s Millibars" % pressure_sensor)
+    print("Temperature: %s C" % temperature_sensor)
+    print("Humidity:  ", humidity_sensor)
+    print("Momentum: ","x={0}, y={1}, z={2}".format(x, y, z))
+    sleep(10)
+
+
 def exit_menu():
     exit()
 
 def main():
-    functions_names = [register_device_menu, device_to_sense_menu, exit_menu] #, show_all_sensed_data
+    functions_names = [register_device_menu, device_to_sense_menu, show_all_sensed_data, exit_menu]
     menu_items = dict(enumerate(functions_names, start=1))
     while True:
         show_menu(menu_items)
