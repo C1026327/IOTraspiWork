@@ -79,16 +79,36 @@ def device_to_sense_menu():
     if to_sense == "P":
         pressure_sensor = round(sense.get_pressure(),2)
         streamingData=StreamingData(None, idForDevice, pressure_sensor,dt.now(),None)
-        StreamingData.add_data(streamingData,engine)
+        streamingData.add_data(streamingData,engine)
         print("Pressure: %s Millibars" % pressure_sensor)
         sense.clear()
-        sense.show_messages("%sMillibars" % pressure_sensor, scroll_speed=0.2, text_colour=[0,0,255])
+        sense.show_message("%sMillibars" % pressure_sensor, scroll_speed=0.2, text_colour=[0,0,255])
         sleep(3)
         sense.clear()
-    
+
+    elif to_sense=="T":
+        temperature_sensor = round(sense.get_temperature(),2)
+        streamingData2 = StreamingData(None,idForDevice, temperature_sensor,dt.now(), None)
+        streamingData2.add_data(streamingData2, engine)
+        print("Temperature: %s C" % temperature_sensor)
+        sense.clear()
+        sense.show_message("%.1f C" % temperature_sensor, scroll_speed=0.1, text_colour=[255,0,255])
+        sleep(3)
+        sense.clear()
+
+    elif to_sense == "H":
+        humidity_sensor = round(sense.get_humidity(),2)
+        streamingData2 = StreamingData(None,idForDevice, humidity_sensor,dt.now(), None)
+        streamingData2.add_data(streamingData2, engine)
+        print("Humidity:  ", humidity_sensor)
+        sense.clear()
+        sense.show_message("%.1f  " % humidity_sensor, scroll_speed=0.1, text_colour=[255,0,255])
+        sleep(3)
+        sense.clear()
+        
 
 def main():
-    functions_names = [register_device_menu, device_to_sense_menu, show_all_sensed_data, exit_menu]
+    functions_names = [register_device_menu, device_to_sense_menu] #, show_all_sensed_data, exit_menu
     menu_items = dict(enumerate(functions_names, start=1))
     while True:
         show_menu(menu_items)
