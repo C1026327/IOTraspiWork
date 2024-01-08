@@ -217,27 +217,27 @@ def publish_mqtt():
 
 def subscribe_mqtt():
     class Subscriber_Client:
-    mqtt_broker="mqtt.eclipseprojects.io"
-    mqtt_broker_port=1883
-    keepalive=60
-    mqtt_client=None
-    topic_interested=None
-    def __init__(self, client_name, location, topic_interested):
-        self.subscriber_client_name=client_name
-        self.subscriber_client_location=location
-        self.topic_interested=topic_interested
+        mqtt_broker="mqtt.eclipseprojects.io"
+        mqtt_broker_port=1883
+        keepalive=60
+        mqtt_client=None
+        topic_interested=None
+        def __init__(self, client_name, location, topic_interested):
+            self.subscriber_client_name=client_name
+            self.subscriber_client_location=location
+            self.topic_interested=topic_interested
 
-    def mydatetime(self):
-        return datetime.now().strftime("%Y.%m.%d %H%M%S")
-    
-    def on_connect(self,client,userdata,flags,rc):
-        print(self.mydatetime(),": result code "+str(rc))
-        self.mqtt_client.subscribe(self.topic_interested)
-        print(self.mydatetime(),": Subscription completed, Waiting for message....")
-        sleep(10)
+        def mydatetime(self):
+            return datetime.now().strftime("%Y.%m.%d %H%M%S")
+        
+        def on_connect(self,client,userdata,flags,rc):
+            print(self.mydatetime(),": result code "+str(rc))
+            self.mqtt_client.subscribe(self.topic_interested)
+            print(self.mydatetime(),": Subscription completed, Waiting for message....")
+            sleep(10)
 
-    def on_message(self, client, userdata, msg):
-        print(self.mydatetime(), ":", msg.topic+ " : "+ str(msg.payload))
+        def on_message(self, client, userdata, msg):
+            print(self.mydatetime(), ":", msg.topic+ " : "+ str(msg.payload))
 
     if __name__ == '__main__':
         name = input("Please enter the name of the subscriber client: ")
@@ -250,124 +250,124 @@ def subscribe_mqtt():
         cc.mqtt_client.connect(cc.mqtt_broker, cc.mqtt_broker_port, cc.keepalive)
         cc.mqtt_client.loop_forever()
 
-def blockchain():
+def BlockchainEncryption():
     class IoTnode:
-    def __init__(self):
-        r_value=Random.new().read
-        key= RSA.generate(2048,r_value)
-        self.publicKey=key.public_key().export_key()
-        self.private_key=key.export_key()
-        self.hostName=""
+        def __init__(self):
+            r_value=Random.new().read
+            key= RSA.generate(2048,r_value)
+            self.publicKey=key.public_key().export_key()
+            self.private_key=key.export_key()
+            self.hostName=""
 
 
-class IoTNodeTransaction:
-    def __init__(self, source, destination, data):
-        self.data = data
-        self.source = source
-        self.destination = destination
-        self.timestamp = datetime.now()
+    class IoTNodeTransaction:
+        def __init__(self, source, destination, data):
+            self.data = data
+            self.source = source
+            self.destination = destination
+            self.timestamp = datetime.now()
 
 
-    def encrypt_transaction(self):
-        encrypted_transaction=""
-        private_key=iot_node.private_key
-        file_out = open("private.pem", "wb")
-        file_out.write(private_key)
-        file_out.close()
-        public_key=iot_node.publicKey
-        file_out = open("public.pem", "wb")
-        file_out.write(public_key)
-        file_out.close()
-        public_key = RSA.import_key(open("public.pem").read())
-        session_key = get_random_bytes(16)
-        cipher_rsa = PKCS1_OAEP.new(public_key) # Encrypt the Session Key with the public RSA key.
-        enc_session_key = cipher_rsa.encrypt(session_key)
-        cipher_aes = AES.new(session_key, AES.MODE_EAX)
-        encoded_dict = str(self.compose_transaction()).encode('utf-8')
-        cipherdata = cipher_aes.encrypt(encoded_dict)
-        msg_to_sent = {"data": cipherdata,
-                       "enc_session_key":enc_session_key,
-                       "nonce":cipher_aes.nonce}
-        encrypted_transaction=base64.b64encode(str(msg_to_sent).encode('utf-8'))
-        return encrypted_transaction
-    
-    def decrypt_transaction(self,data):
-        x=base64.b64decode(data)
-        x=x.decode('utf-8')
-        x=eval(x)
-        data=x.get("data")
-        enc_session_key=x.get("enc_session_key")
-        nonce=x.get("nonce")
-        private_key=RSA.import_key(open("private.pem").read())
-        cipher_rsa= PKCS1_OAEP.new(private_key)
-        session_key=cipher_rsa.decrypt(enc_session_key)
-        cipher_aes=AES.new(session_key, AES.MODE_EAX, nonce)
-        data=cipher_aes.decrypt(data)
-        return data
-
-
-
-    def compose_transaction(self):
-        transaction_dic=""
-        transaction_dic=collections.OrderedDict({
-            "source":self.source,
-            "destination":self.destination,
-            "data":self.data,
-            "timeStamp":self.timestamp
-        })
-        return transaction_dic
-
-
-class BlockChain:
-    def __init__(self):
-        self.v_transactions = []
-        self.previous_block_hash=""
-        self.Nonce=""
-    
-    def create_block(self):
-        global last_transaction_index,last_block_hash
-        temp_transaction=iot_transactions[last_transaction_index]
-        self.v_transactions.append(temp_transaction)
-        last_transaction_index += 1
-        self.previous_block_hash=last_block_hash
-        self.Nonce=self.mine(self, 2)
-        digest = hash(self)
-        blocks.append(self)
-        last_block_hash=digest
-    
-    def mine(self,block,mine_difficulty=1):
-        assert mine_difficulty >=1
-        prefix = '1' * mine_difficulty
-        for c in range(1000):
-            digest = sha256(str(hash(block)) + str(c))
-            if digest.startswith(prefix):
-                print("after " + str(c) + " iterations found nonce:  " + digest)
-        return digest
-    
-    def fetch_blocks(self):
-        out=[]
-        print("Number of blocks in the chain:  ", len(blocks))
-        for i in range (len(blocks)):
-            block_temp = blocks[i]
-            print ("block # ", i)
-            res = {"block # ": i}
+        def encrypt_transaction(self):
+            encrypted_transaction=""
+            private_key=iot_node.private_key
+            file_out = open("private.pem", "wb")
+            file_out.write(private_key)
+            file_out.close()
+            public_key=iot_node.publicKey
+            file_out = open("public.pem", "wb")
+            file_out.write(public_key)
+            file_out.close()
+            public_key = RSA.import_key(open("public.pem").read())
+            session_key = get_random_bytes(16)
+            cipher_rsa = PKCS1_OAEP.new(public_key) # Encrypt the Session Key with the public RSA key.
+            enc_session_key = cipher_rsa.encrypt(session_key)
+            cipher_aes = AES.new(session_key, AES.MODE_EAX)
+            encoded_dict = str(self.compose_transaction()).encode('utf-8')
+            cipherdata = cipher_aes.encrypt(encoded_dict)
+            msg_to_sent = {"data": cipherdata,
+                        "enc_session_key":enc_session_key,
+                        "nonce":cipher_aes.nonce}
+            encrypted_transaction=base64.b64encode(str(msg_to_sent).encode('utf-8'))
+            return encrypted_transaction
         
-            for t in block_temp.v_transactions:
-                count=0;
-                count+=1
-                print("Transaction no   ",count)
-                res["transaction_no"]=count
-                print("IoT source node        : ", iot_node.hostName)
-                res["iot_source_node"]=iot_node.hostName
+        def decrypt_transaction(self,data):
+            x=base64.b64decode(data)
+            x=x.decode('utf-8')
+            x=eval(x)
+            data=x.get("data")
+            enc_session_key=x.get("enc_session_key")
+            nonce=x.get("nonce")
+            private_key=RSA.import_key(open("private.pem").read())
+            cipher_rsa= PKCS1_OAEP.new(private_key)
+            session_key=cipher_rsa.decrypt(enc_session_key)
+            cipher_aes=AES.new(session_key, AES.MODE_EAX, nonce)
+            data=cipher_aes.decrypt(data)
+            return data
 
 
 
+        def compose_transaction(self):
+            transaction_dic=""
+            transaction_dic=collections.OrderedDict({
+                "source":self.source,
+                "destination":self.destination,
+                "data":self.data,
+                "timeStamp":self.timestamp
+            })
+            return transaction_dic
 
 
-            out.append(res)
-        jsonData=json.dumps(out)
-        return jsonData
+    class BlockChain:
+        def __init__(self):
+            self.v_transactions = []
+            self.previous_block_hash=""
+            self.Nonce=""
         
+        def create_block(self):
+            global last_transaction_index,last_block_hash
+            temp_transaction=iot_transactions[last_transaction_index]
+            self.v_transactions.append(temp_transaction)
+            last_transaction_index += 1
+            self.previous_block_hash=last_block_hash
+            self.Nonce=self.mine(self, 2)
+            digest = hash(self)
+            blocks.append(self)
+            last_block_hash=digest
+        
+        def mine(self,block,mine_difficulty=1):
+            assert mine_difficulty >=1
+            prefix = '1' * mine_difficulty
+            for c in range(1000):
+                digest = sha256(str(hash(block)) + str(c))
+                if digest.startswith(prefix):
+                    print("after " + str(c) + " iterations found nonce:  " + digest)
+            return digest
+        
+        def fetch_blocks(self):
+            out=[]
+            print("Number of blocks in the chain:  ", len(blocks))
+            for i in range (len(blocks)):
+                block_temp = blocks[i]
+                print ("block # ", i)
+                res = {"block # ": i}
+            
+                for t in block_temp.v_transactions:
+                    count=0;
+                    count+=1
+                    print("Transaction no   ",count)
+                    res["transaction_no"]=count
+                    print("IoT source node        : ", iot_node.hostName)
+                    res["iot_source_node"]=iot_node.hostName
+
+
+
+
+
+                out.append(res)
+            jsonData=json.dumps(out)
+            return jsonData
+            
     #region Flask
     app = Flask(__name__)
 
@@ -407,7 +407,7 @@ def exit_menu():
     exit()
 
 def main():
-    functions_names = [register_device_menu, device_to_sense_menu, show_all_sensed_data, publish_mqtt, subscribe_mqtt, exit_menu]
+    functions_names = [register_device_menu, device_to_sense_menu, show_all_sensed_data, publish_mqtt, subscribe_mqtt, BlockchainEncryption, exit_menu]
     menu_items = dict(enumerate(functions_names, start=1))
     while True:
         show_menu(menu_items)
